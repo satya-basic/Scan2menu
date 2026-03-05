@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Restaurant Menu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TABLE NUMBER PAGE -->
+<div id="tablePage" class="page">
+  <h1>Welcome to Spicy Treat</h1>
+  <input type="number" id="tableNo" placeholder="Enter Table Number">
+  <button onclick="goToMenu()">Proceed</button>
+</div>
+
+<!-- MENU PAGE -->
+<div id="menuPage" class="page hidden">
+
+<h2>Table No: <span id="showTable"></span></h2>
+
+<!-- FILTERS -->
+<div class="filters">
+  <button onclick="filterItems('all')">All</button>
+  <button onclick="filterItems('veg')">Veg</button>
+  <button onclick="filterItems('nonveg')">Non-Veg</button>
+</div>
+
+<!-- MENU ITEMS -->
+<div class="menu">
+
+<h3>🍟 Starters</h3>
+<div class="item veg">
+  <img src="images/starter.jpg">
+  <p>Paneer Starter ₹120</p>
+  <button onclick="addItem(120)">Add</button>
+  <button onclick="removeItem(120)">Remove</button>
+</div>
+
+<h3>🍛 Main Course</h3>
+<div class="item veg">
+  <img src="images/veg-biryani.jpg">
+  <p>Veg Biryani ₹150</p>
+  <button onclick="addItem(150)">Add</button>
+  <button onclick="removeItem(150)">Remove</button>
+</div>
+
+<div class="item nonveg">
+  <img src="images/chicken-biryani.jpg">
+  <p>Chicken Biryani ₹220</p>
+  <button onclick="addItem(220)">Add</button>
+  <button onclick="removeItem(220)">Remove</button>
+</div>
+
+<h3>🍰 Desserts</h3>
+<div class="item veg">
+  <img src="images/icecream.jpg">
+  <p>Ice Cream ₹80</p>
+  <button onclick="addItem(80)">Add</button>
+  <button onclick="removeItem(80)">Remove</button>
+</div>
+
+<h3>🥤 Cool Drinks</h3>
+<div class="item veg">
+  <img src="images/coke.jpg">
+  <p>Coca Cola ₹40</p>
+  <button onclick="addItem(40)">Add</button>
+  <button onclick="removeItem(40)">Remove</button>
+</div>
+
+</div>
+
+<h2>Total Bill: ₹<span id="total">0</span></h2>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
