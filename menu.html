@@ -1,114 +1,111 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Digital Menu</title>
-    <link rel="stylesheet" href="menu.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Digital Menu</title>
+<link rel="stylesheet" href="menu.css" />
   </head>
-  <body data-testid="menu-page-body">
-    <div class="background-layer" aria-hidden="true"></div>
-
-    <header class="menu-header" data-testid="menu-header">
-      <div class="header-left" data-testid="menu-header-left-zone">
-        <div class="logo-block" data-testid="restaurant-logo-block">
-          <div class="logo-mark" data-testid="restaurant-logo-mark">R</div>
-          <div class="logo-text" data-testid="restaurant-name-text">Restaurant</div>
-        </div>
-
-        <nav class="category-nav" data-testid="category-filter-nav" aria-label="Menu category filter">
-          <button class="category-btn active" data-category="all" data-testid="category-all-button" type="button">
-            All
-          </button>
-          <button class="category-btn" data-category="veg" data-testid="category-veg-button" type="button">
-            Veg
-          </button>
-          <button class="category-btn" data-category="non-veg" data-testid="category-non-veg-button" type="button">
-            Non-Veg
-          </button>
-        </nav>
-      </div>
-
-      <div class="header-right" data-testid="menu-header-right-zone">
-        <a href="#about" class="header-link" data-testid="header-about-link">About</a>
-        <a href="#contact" class="header-link" data-testid="header-contact-link">Contact</a>
-      </div>
-    </header>
-
-    <main class="menu-main" data-testid="menu-main-content">
-      <section class="table-banner" data-testid="table-banner">
-        <div class="table-banner-info" data-testid="table-banner-info">
-          <span class="table-label" data-testid="table-label">Dining Table</span>
-          <strong id="table-number" data-testid="table-number-display">Detecting...</strong>
-        </div>
-        <button id="demo-table-btn" class="demo-btn" type="button" data-testid="demo-table-button">
-          Try Demo Table
-        </button>
-      </section>
-
-      <section class="hero-section" data-testid="menu-hero-section">
-        <h1 class="hero-title" data-testid="menu-heading-title">Digital Menu Card</h1>
-        <p class="hero-subtitle" data-testid="menu-heading-subtitle">
-          Scan your QR, open your table menu, and order quickly.
-        </p>
-      </section>
-
-      <section class="menu-list-section" data-testid="menu-list-section" aria-live="polite">
-        <div class="section-head" data-testid="menu-section-head">
-          <h2 data-testid="menu-section-title">Menu Items</h2>
-          <p id="menu-count" data-testid="menu-items-count"></p>
-        </div>
-        <div id="menu-list" class="menu-list" data-testid="menu-items-container"></div>
-      </section>
-
-      <section id="about" class="info-section" data-testid="about-section">
-        <h3 data-testid="about-section-title">About</h3>
-        <p data-testid="about-section-description">
-          We serve freshly prepared food with a clean digital dining experience. This menu is designed for fast table access and simple browsing.
-        </p>
-      </section>
-
-      <section id="contact" class="info-section" data-testid="contact-section">
-        <h3 data-testid="contact-section-title">Contact</h3>
-        <p data-testid="contact-phone-text">Phone: +91 98765 43210</p>
-        <p data-testid="contact-email-text">Email: hello@restaurantmenu.com</p>
-        <p data-testid="contact-address-text">Address: Main Market Road, Your City</p>
-      </section>
-
-      <!-- Cart Sidebar -->
-<aside class="cart-sidebar" data-testid="cart-sidebar">
-  <div class="cart-header">
-    <h2>Your Order</h2>
-    <p id="cart-table-number" class="cart-table-text"></p>
+  <body>
+<div class="background-layer" aria-hidden="true"></div>
+<div id="table-entry-screen" class="table-entry-screen hidden">
+  <div class="table-entry-card" role="dialog" aria-modal="true" aria-labelledby="table-entry-title">
+    <p class="table-entry-kicker">Welcome</p>
+    <h2 id="table-entry-title">Enter Table Number</h2>
+    <p class="table-entry-copy">Please enter your table number to continue.</p>
+    <form id="table-entry-form" class="table-entry-form">
+      <label for="table-entry-input" class="sr-only">Table Number</label>
+      <input id="table-entry-input" type="text" inputmode="text" autocomplete="off" maxlength="10" placeholder="e.g. 12 or A1" required />
+      <p id="table-entry-error" class="table-entry-error hidden" aria-live="polite"></p>
+      <button type="submit">Continue</button>
+    </form>
   </div>
-
-  <div id="cart-items" class="cart-items">
-    <p class="cart-empty">Your cart is empty</p>
-  </div>
-
-  <div class="cart-footer">
-    <div class="cart-row">
-      <span>Subtotal</span>
-      <span id="cart-subtotal">₹0</span>
-    </div>
-    <div class="cart-row">
-      <span>GST (5%)</span>
-      <span id="cart-gst">₹0</span>
-    </div>
-    <div class="cart-row total-row">
-      <strong>Total</strong>
-      <strong id="cart-total">₹0</strong>
-    </div>
-
-    <button id="clear-cart-btn" class="clear-btn">Clear Cart</button>
-    <button id="place-order-btn" class="order-btn">Place Order</button>
-  </div>
-</aside>
-
 </div>
-      
-    </main>
 
-    <script src="menu.js"></script>
+<header class="menu-header">
+  <div class="header-left">
+    <div class="logo-block">
+      <img src="assets\food-menu-3-svgrepo-com.svg" alt="M" width="30" height="30" />
+      <div class="logo-text">TableBite</div>
+    </div>
+
+    <nav class="category-nav" aria-label="Menu category filter">
+      <button class="category-btn active" data-category="all" type="button">All</button>
+      <button class="category-btn" data-category="veg" type="button">Veg</button>
+      <button class="category-btn" data-category="non-veg" type="button">Non-Veg</button>
+    </nav>
+  </div>
+
+  <div class="header-right">
+    <a href="#about" class="header-link">About</a>
+    <a href="#contact" class="header-link">Contact</a>
+    <button id="cart-toggle-btn" class="cart-toggle-btn" type="button" aria-label="Open cart">
+      <img src="assets/dinner-svgrepo-com.svg" alt="Dinner icon" width="24" height="24" />
+      <span id="cart-badge" class="cart-badge hidden">0</span>
+    </button>
+  </div>
+</header>
+
+<div class="main-layout">
+  <main class="menu-main">
+    <section class="table-banner">
+      <div class="table-banner-info">
+        <span class="table-label">Dining Table</span>
+        <strong id="table-number">Detecting...</strong>
+      </div>
+      <button id="demo-table-btn" class="demo-btn" type="button">Try Demo Table</button>
+    </section>
+
+    <section class="hero-section">
+      <h1 class="hero-title">Digital Menu Card</h1>
+      <p class="hero-subtitle">Scan your QR, open your table menu, and order quickly.</p>
+    </section>
+
+    <section class="menu-list-section">
+      <div class="section-head">
+        <h2>Menu Items</h2>
+        <p id="menu-count"></p>
+      </div>
+      <div id="menu-list" class="menu-list"></div>
+    </section>
+
+    <section id="about" class="info-section">
+      <h3>About</h3>
+      <p>We serve freshly prepared food with a clean digital dining experience. This menu is designed for fast table access and simple browsing.</p>
+    </section>
+
+    <section id="contact" class="info-section">
+      <h3>Contact</h3>
+      <p>Phone: +91 98765 43210</p>
+      <p>Email: hello@tablebite.com</p>
+      <p>Address: Main Market Road, Your City</p>
+    </section>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <aside id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <div class="cart-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <h2>Your Order</h2>
+      </div>
+      <button id="cart-close-btn" class="cart-close-btn" aria-label="Close cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div id="cart-table-info" class="cart-table-info hidden"></div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total" class="cart-total-amount">₹0</span>
+      </div>
+      <button id="order-btn" class="order-btn disabled">Add items to order</button>
+    </div>
+  </aside>
+  <!-- Mobile Overlay -->
+  <div id="cart-overlay" class="cart-overlay hidden"></div>
+</div>
+<script src="menu.js"></script>
   </body>
 </html>
