@@ -5,6 +5,7 @@ name: "Paneer Tikka",
 description: "Char-grilled cottage cheese cubes with mint chutney.",
 price: 280,
 type: "veg",
+category: "starters",
 image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=500&q=80",
   },
   {
@@ -13,6 +14,7 @@ name: "Margherita Pizza",
 description: "Stone-baked pizza with mozzarella, basil, and tomato sauce.",
 price: 340,
 type: "veg",
+category: "main-courses",
 image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80",
   },
   {
@@ -21,6 +23,7 @@ name: "Veg Hakka Noodles",
 description: "Wok-tossed noodles with fresh vegetables and Asian sauces.",
 price: 260,
 type: "veg",
+category: "main-courses",
 image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=500&q=80",
   },
   {
@@ -29,6 +32,7 @@ name: "Chicken Tandoori",
 description: "Classic marinated chicken roasted in traditional tandoor.",
 price: 420,
 type: "non-veg",
+category: "starters",
 image: "https://images.unsplash.com/photo-1598515214211-89d3c737e9f5?auto=format&fit=crop&w=500&q=80",
   },
   {
@@ -37,6 +41,7 @@ name: "Butter Chicken",
 description: "Creamy tomato gravy with tender chicken pieces and spices.",
 price: 390,
 type: "non-veg",
+category: "main-courses",
 image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=500&q=80",
   },
   {
@@ -45,6 +50,7 @@ name: "Fish Curry",
 description: "Lightly spiced coconut fish curry served with aromatic herbs.",
 price: 450,
 type: "non-veg",
+category: "main-courses",
 image: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?auto=format&fit=crop&w=500&q=80",
   },
 ];
@@ -54,7 +60,9 @@ const menuList = document.getElementById("menu-list");
 const menuCount = document.getElementById("menu-count");
 const tableNumber = document.getElementById("table-number");
 const demoTableBtn = document.getElementById("demo-table-btn");
+const helpToggleBtn = document.getElementById("help-toggle-btn");
 const categoryButtons = document.querySelectorAll(".category-btn");
+const sideCategoryButtons = document.querySelectorAll(".side-category-btn");
 const cartSidebar = document.getElementById("cart-sidebar");
 const cartOverlay = document.getElementById("cart-overlay");
 const cartToggleBtn = document.getElementById("cart-toggle-btn");
@@ -68,9 +76,17 @@ const tableEntryScreen = document.getElementById("table-entry-screen");
 const tableEntryForm = document.getElementById("table-entry-form");
 const tableEntryInput = document.getElementById("table-entry-input");
 const tableEntryError = document.getElementById("table-entry-error");
+const messageModal = document.getElementById("message-modal");
+const messageModalCloseBtn = document.getElementById("message-modal-close-btn");
+const messageForm = document.getElementById("message-form");
+const staffMessageInput = document.getElementById("staff-message-input");
+const messageFormError = document.getElementById("message-form-error");
 
 let activeCategory = "all";
+let activeFoodCategory = "all";
 let cart = {}; // { itemId: quantity }
+const supportPhone = "+919876543210";
+const supportWhatsApp = "919876543210";
 
 // Utility Functions
 const getTableParam = () => {
@@ -121,6 +137,16 @@ demoTableBtn.style.display = "none";
 cartTableInfo.textContent = `Table ${table}`;
 cartTableInfo.classList.remove("hidden");
   }
+  updateHelpMessageLink();
+};
+
+const updateHelpMessageLink = () => {
+  const table = getTableParam();
+  const subtitle = document.getElementById("message-modal-subtitle");
+  if (!subtitle) return;
+  subtitle.textContent = table
+? `Describe your issue for Table ${table}, then send it to staff.`
+: "Describe your issue and send it to staff.";
 };
 
 const getCartTotal = () => {
@@ -214,10 +240,11 @@ window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 
 const renderMenu = () => {
-  const visibleItems =
-activeCategory === "all"
-  ? menuItems
-  : menuItems.filter((item) => item.type === activeCategory);
+  const visibleItems = menuItems.filter((item) => {
+const typeMatch = activeCategory === "all" || item.type === activeCategory;
+const foodCategoryMatch = activeFoodCategory === "all" || item.category === activeFoodCategory;
+return typeMatch && foodCategoryMatch;
+  });
 
   menuCount.textContent = `${visibleItems.length} item${visibleItems.length === 1 ? "" : "s"}`;
 
@@ -276,6 +303,16 @@ button.setAttribute("aria-pressed", String(isActive));
   renderMenu();
 };
 
+const setFoodCategory = (nextFoodCategory) => {
+  activeFoodCategory = nextFoodCategory;
+  sideCategoryButtons.forEach((button) => {
+const isActive = button.dataset.foodCategory === nextFoodCategory;
+button.classList.toggle("active", isActive);
+button.setAttribute("aria-pressed", String(isActive));
+  });
+  renderMenu();
+};
+
 const openCart = () => {
   cartSidebar.classList.add("open");
   cartOverlay.classList.remove("hidden");
@@ -284,6 +321,31 @@ const openCart = () => {
 const closeCart = () => {
   cartSidebar.classList.remove("open");
   cartOverlay.classList.add("hidden");
+};
+
+const openMessageModal = () => {
+  updateHelpMessageLink();
+  messageModal.classList.remove("hidden");
+  messageFormError.classList.add("hidden");
+  messageFormError.textContent = "";
+  setTimeout(() => staffMessageInput.focus(), 0);
+};
+
+const closeMessageModal = () => {
+  messageModal.classList.add("hidden");
+};
+
+const sendStaffMessage = (messageText) => {
+  const table = getTableParam();
+  const fullMessage = table
+? `Table ${table}: ${messageText}`
+: messageText;
+  const whatsappUrl = `https://wa.me/${supportWhatsApp}?text=${encodeURIComponent(fullMessage)}`;
+  const smsUrl = `sms:${supportPhone}?body=${encodeURIComponent(fullMessage)}`;
+  const popup = window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+  if (!popup) {
+window.location.href = smsUrl;
+  }
 };
 
 const placeOrder = () => {
@@ -301,9 +363,34 @@ categoryButtons.forEach((button) => {
   button.addEventListener("click", () => setCategory(button.dataset.category));
 });
 
+sideCategoryButtons.forEach((button) => {
+  button.addEventListener("click", () => setFoodCategory(button.dataset.foodCategory));
+});
+
 demoTableBtn.addEventListener("click", () => {
   setTableInUrl("12");
   updateTableView();
+});
+
+helpToggleBtn.addEventListener("click", openMessageModal);
+messageModalCloseBtn.addEventListener("click", closeMessageModal);
+
+messageForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const text = staffMessageInput.value.trim();
+  if (!text) {
+messageFormError.textContent = "Please enter a message before sending.";
+messageFormError.classList.remove("hidden");
+return;
+  }
+  sendStaffMessage(text);
+  closeMessageModal();
+  staffMessageInput.value = "";
+});
+
+staffMessageInput.addEventListener("input", () => {
+  messageFormError.classList.add("hidden");
+  messageFormError.textContent = "";
 });
 
 tableEntryForm.addEventListener("submit", (event) => {
@@ -342,9 +429,21 @@ cartToggleBtn.addEventListener("click", () => {
 cartCloseBtn.addEventListener("click", closeCart);
 cartOverlay.addEventListener("click", closeCart);
 orderBtn.addEventListener("click", placeOrder);
+document.addEventListener("click", (event) => {
+  if (!messageModal.classList.contains("hidden") && event.target === messageModal) {
+closeMessageModal();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !messageModal.classList.contains("hidden")) {
+closeMessageModal();
+  }
+});
 
 // Initialize
 initializeTableEntry();
 updateTableView();
 setCategory("all");
+setFoodCategory("all");
 renderCart();
